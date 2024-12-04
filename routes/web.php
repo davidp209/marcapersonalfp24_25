@@ -20,49 +20,35 @@ Route::get('perfil/{id?}', function ($id = null) {
 })->where('id', '[0-9]*');
 
 Route::get('pruebaDB/{votos?}', function ($votos = null) {
-    $html = '
 
-    ';
+    $html= getEstadisticas();
+
+    Estudiante::where('nombre', 'Juan')
+                ->where ('apellidos', 'Martínez')
+                ->delete();
+
+    $html .= getEstadisticas();
+
+    return $html;
+});
+function getEstadisticas()
+{
     $count = Estudiante::where('votos', '>', 100)->count();
     $max = Estudiante::max('votos');
     $min = Estudiante::min('votos');
     $media = Estudiante::avg('votos');
     $total = Estudiante::sum('votos');
+    $html = '<ul>';
+    $html .= '<li>Cantidad de estudiantes con votos mayor a 100: ' . $count . '</li>';
+    $html .= '<li>Votos máximos: ' . $max . '</li>';
+    $html .= '<li>Votos mínimos: ' . $min . '</li>';
+    $html .= '<li>Promedio de votos: ' . $media . '</li>';
+    $html .= '<li>Total de votos: ' . $total . '</li>';
+    $html .= "</ul>\n<ul>";
+    return $html;
+}
 
-    $html .= '
-    Cantidad de estudiantes con votos mayor a 100: ' . $count . '';
-    $html .= '
-    Votos máximos: ' . $max . '';
-    $html .= '
-    Votos mínimos: ' . $min . '';
-    $html .= '
-    Promedio de votos: ' . $media . '';
-    $html .= '
-    Total de votos: ' . $total . '';
 
-    $count = Estudiante::where('votos', '>', 100)->count();
-    $html .= 'Antes: ' . $count . '
-    ';
-
-    $estudiante = new Estudiante;
-    $estudiante->nombre = 'Juan';
-    $estudiante->apellidos = 'Martínez';
-    $estudiante->direccion = 'Dirección de Juan';
-    $estudiante->votos = 130;
-    $estudiante->confirmado = true;
-    $estudiante->ciclo = 'DAW';
-    $estudiante->save();
-
-    $count = Estudiante::where('votos', '>', 100)->count();
-    $html .= 'Después: ' . $count . '
-    ';
-
-    return $html . "
-    \n
-    ";
-});
-
-include __DIR__ . '/actividades.php';
 include __DIR__ . '/curriculos.php';
 include __DIR__ . '/proyectos.php';
 include __DIR__ . '/reconocimientos.php';
