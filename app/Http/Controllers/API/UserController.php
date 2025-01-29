@@ -5,7 +5,9 @@ namespace App\Http\Controllers\API;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\UserResource;
 use App\Models\User;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
+
 
 class UserController extends Controller
 {
@@ -40,6 +42,17 @@ class UserController extends Controller
     {
         return new UserResource($user);
     }
+
+    public function count()
+    {
+        $users = User::all();
+
+        return response()->json([
+            'users' => $users->count(),
+        ]);
+
+    }
+
 
     /**
      * Update the specified resource in storage.

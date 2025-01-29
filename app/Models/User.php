@@ -47,4 +47,6 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+    public static $filterColumns = ['name', 'email'];
+
 }
