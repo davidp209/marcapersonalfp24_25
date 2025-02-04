@@ -14,6 +14,10 @@
                 <h3>Estudiante {{$reconocimiento->estudiante_id }}</h3>
             </header>
             <p>
+
+
+
+                
             <!--
                 El siguiente código debe ser adaptado.
                 Una vez adaptado, elimina este comentario.

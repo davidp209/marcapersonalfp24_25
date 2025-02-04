@@ -47,4 +47,8 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+    public function curriculos()
+    {
+        return $this->hasOne(Curriculo::class, 'user_id' ); // Relacionamento de 1 para 1
+    }
 }
