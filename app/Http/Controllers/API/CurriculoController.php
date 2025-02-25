@@ -5,11 +5,22 @@ namespace App\Http\Controllers\API;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\CurriculoResource;
 use App\Models\Curriculo;
+use GuzzleHttp\Middleware;
 use Illuminate\Http\Request;
+use Illuminate\Routing\Controllers\HasMiddleware;
 
-class CurriculoController extends Controller
+class CurriculoController extends Controller implements HasMiddleware
 {
     public $modelclass = Curriculo::class;
+
+    public static function middleware(): array
+    {
+
+        return [
+            new Middleware('auth:sanctum', except: ['index', 'show']),
+        ];
+
+    }
 
     /**
      * Display a listing of the resource.
@@ -27,6 +38,9 @@ class CurriculoController extends Controller
      */
     public function store(Request $request)
     {
+        if ($request->user()->esAdmin()) {
+            $curriculo['user_id'] = $request->user()->id;
+        }
 
         $curriculo = json_decode($request->getContent(), true);
         $curriculo = Curriculo::create($curriculo);

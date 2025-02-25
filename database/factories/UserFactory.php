@@ -27,7 +27,7 @@ class UserFactory extends Factory
         $apellidos = fake()->lastName();
         $name = "$nombre $apellidos";
         return [
-            'name' => $name,
+            'name' => fake()->unique()->userName(),
             'nombre' => $nombre,
             'apellidos' => $apellidos,
             'email' => fake()->unique()->safeEmail(),
@@ -44,6 +44,26 @@ class UserFactory extends Factory
     {
         return $this->state(fn (array $attributes) => [
             'email_verified_at' => null,
+        ]);
+    }
+    
+    /**
+     * Indicate that the model's email  should be student.
+     */
+    public function estudiante(): static
+    {
+        return $this->state(fn (array $attributes) => [
+            'email' => $attributes['name'] . '@' . env('STUDENT_EMAIL_DOMAIN', 'student.com'),
+        ]);
+    }
+
+    /**
+     * Indicate that the model's email  should be teacher.
+     */
+    public function docente(): static
+    {
+        return $this->state(fn (array $attributes) => [
+            'email' => $attributes['name'] . '@' . env('TEACHER_EMAIL_DOMAIN', 'teacher.com'),
         ]);
     }
 }
